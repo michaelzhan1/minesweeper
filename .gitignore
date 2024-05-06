@@ -15,6 +15,7 @@
 
 # Output folder
 out/
+bin/
 
 # Package Files #
 *.jar
