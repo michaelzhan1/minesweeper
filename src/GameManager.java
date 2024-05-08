@@ -126,14 +126,22 @@ public class GameManager extends JPanel {
                         }
                     } // for
                 } // for
+            } // if
+        } // while
+        seen.clear();
+    } // revealCells
+
+    private void disableAll() {
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                buttons[i][j].setEnabled(false);
             }
         }
-
-        seen.clear();
     }
 
     private void clickCell(int i, int j) {
         if (values[i][j] == -1) {
+            disableAll();
             System.out.println("You died");
         } // if
 
