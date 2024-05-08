@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import java.awt.GridLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,19 +26,19 @@ public class GameManager extends JPanel {
 
         for (int i = 0; i < WIDTH / BUTTON_WIDTH; i++) {
             for (int j = 0; j < HEIGHT / BUTTON_HEIGHT; j++) {
+
                 JButton newButton = createNewButton(i, j);
                 buttons[i][j] = newButton;
-                add(newButton);
 
                 values[i][j] = i % 10;
                 // old code to generate text
-//                JTextField newText = new JTextField(String.valueOf(values[i][j]));
-//                newText.setEditable(false);
-//                newText.setHorizontalAlignment(JTextField.CENTER);
-//                newText.setBounds(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
-//                newText.setFocusable(false);
+
+                add(newButton);
             }
         }
+
+        UIManager.put("Button.disabledText", Color.BLACK);
+        UIManager.put("Button.select", Color.LIGHT_GRAY);
     }
 
     private JButton createNewButton(int i, int j) {
@@ -47,17 +49,17 @@ public class GameManager extends JPanel {
         newButton.addActionListener(new ActionListener() { // note: may be replaced with lambda, but unsure if we need e
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Button clicked! Row: " + i + " , Col: " + j);
-                System.out.println("Setting button to invisible");
-                removeButton(i, j);
+                clickCell(i, j);
             }
         });
         return newButton;
     }
 
-
-    private void removeButton(int i, int j) {
-        buttons[i][j].setVisible(false);
-//        this.repaint();
+    private void clickCell(int i, int j) {
+        buttons[i][j].setText(Integer.toString(values[i][j]));
+        buttons[i][j].setEnabled(false);
+        buttons[i][j].setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100)));
+        buttons[i][j].setBackground(Color.LIGHT_GRAY);
+        buttons[i][j].repaint();
     }
 }
