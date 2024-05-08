@@ -3,6 +3,7 @@ import javax.swing.border.BevelBorder;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import java.awt.Color;
+import java.util.Random;
 
 
 public class GameManager extends JPanel {
@@ -13,10 +14,12 @@ public class GameManager extends JPanel {
     static final int BUTTON_HEIGHT = 40;
     static final int ROWS = WIDTH / BUTTON_WIDTH;
     static final int COLS = HEIGHT / BUTTON_HEIGHT;
+    static final int NUM_MINES = 9;
 
     // State variables
     JButton[][] buttons = new JButton[ROWS][COLS];
     int[][] values = new int[ROWS][COLS];
+    int[] minePositions = new int[NUM_MINES];
 
     public GameManager() {
         setLayout(new GridLayout(ROWS, COLS));
@@ -26,10 +29,11 @@ public class GameManager extends JPanel {
             for (int j = 0; j < HEIGHT / BUTTON_HEIGHT; j++) {
                 JButton newButton = createNewButton(i, j);
                 buttons[i][j] = newButton;
-                values[i][j] = i % 10; // TODO: change to random generation with mines
+//                values[i][j] = i % 10; // TODO: change to random generation with mines
                 this.add(newButton);
             } // for
         } // for
+        initMines();
 
         // UI changes
         UIManager.put("Button.disabledText", Color.BLACK);
@@ -52,6 +56,33 @@ public class GameManager extends JPanel {
             } // actionPerformed
         }); // getActionMap
     } // GameManager
+
+    private void initMines() {
+        Random rand = new Random();
+        int minePos;
+        for (int i = 0; i < NUM_MINES; i++) {
+            minePos = rand.nextInt(ROWS * COLS);
+            minePositions[i] = minePos;
+            values[minePos / COLS][minePos % COLS] = -1;
+        } // for
+
+        int mineNeighborCount;
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                if (values[i][j] != -1) {
+                    mineNeighborCount = 0;
+                    for (int ii = Math.max(0, i - 1); ii < Math.min(ROWS, i + 2); ii++) {
+                        for (int jj = Math.max(0, j - 1); jj < Math.min(COLS, j + 2); jj++) {
+                            if (values[ii][jj] == -1) {
+                                mineNeighborCount++;
+                            } // if
+                        } // for
+                    } // for
+                    values[i][j] = mineNeighborCount;
+                } // if
+            } // for
+        } // for
+    } // initMines
 
     private JButton createNewButton(int i, int j) {
         JButton newButton = new JButton();
