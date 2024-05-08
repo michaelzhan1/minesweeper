@@ -7,11 +7,15 @@
 # BlueJ files
 *.ctxt
 
+# IntelliJ files
+.idea/
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
 # Output folder
 out/
+bin/
 
 # Package Files #
 *.jar
