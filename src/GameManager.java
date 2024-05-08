@@ -3,7 +3,12 @@ import javax.swing.border.BevelBorder;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import java.awt.Color;
+import java.util.Arrays;
 import java.util.Random;
+import java.util.Queue;
+import java.util.LinkedList;
+import java.util.Set;
+import java.util.HashSet;
 
 
 public class GameManager extends JPanel {
@@ -19,7 +24,11 @@ public class GameManager extends JPanel {
     // State variables
     JButton[][] buttons = new JButton[ROWS][COLS];
     int[][] values = new int[ROWS][COLS];
-    int[] minePositions = new int[NUM_MINES];
+    int minesRemaining = ROWS * COLS - NUM_MINES;
+
+    // Reveal cell logic: here for optimization
+    Queue<Integer> queue = new LinkedList<>();
+    Set<Integer> seen = new HashSet<>();
 
     public GameManager() {
         setLayout(new GridLayout(ROWS, COLS));
@@ -29,7 +38,6 @@ public class GameManager extends JPanel {
             for (int j = 0; j < HEIGHT / BUTTON_HEIGHT; j++) {
                 JButton newButton = createNewButton(i, j);
                 buttons[i][j] = newButton;
-//                values[i][j] = i % 10; // TODO: change to random generation with mines
                 this.add(newButton);
             } // for
         } // for
@@ -62,7 +70,6 @@ public class GameManager extends JPanel {
         int minePos;
         for (int i = 0; i < NUM_MINES; i++) {
             minePos = rand.nextInt(ROWS * COLS);
-            minePositions[i] = minePos;
             values[minePos / COLS][minePos % COLS] = -1;
         } // for
 
@@ -92,11 +99,50 @@ public class GameManager extends JPanel {
         return newButton;
     } // createNewButton
 
-    private void clickCell(int i, int j) {
+    private void revealSingleCell(int i, int j) {
         buttons[i][j].setText(Integer.toString(values[i][j]));
         buttons[i][j].setEnabled(false);
         buttons[i][j].setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100)));
         buttons[i][j].setBackground(Color.LIGHT_GRAY);
+    } // revealCell
+
+    private void revealCells(int startI, int startJ) {
+        queue.offer(startI * COLS + startJ);
+        seen.add(startI * COLS + startJ);
+
+        int curr, i, j;
+        while (!queue.isEmpty()) {
+            curr = queue.poll();
+            i = curr / COLS;
+            j = curr % COLS;
+
+            revealSingleCell(i, j);
+            if (values[i][j] == 0) {
+                for (int ii = Math.max(0, i - 1); ii < Math.min(ROWS, i + 2); ii++) {
+                    for (int jj = Math.max(0, j - 1); jj < Math.min(COLS, j + 2); jj++) {
+                        if ((i != ii || j != jj) && !seen.contains(ii * COLS + jj)) {
+                            queue.offer(ii * COLS + jj);
+                            seen.add(ii * COLS +jj);
+                        }
+                    } // for
+                } // for
+            }
+        }
+
+        seen.clear();
+    }
+
+    private void clickCell(int i, int j) {
+        if (values[i][j] == -1) {
+            System.out.println("You died");
+        } // if
+
+        revealCells(i, j);
+        minesRemaining--;
+
+        if (minesRemaining == 0) {
+            System.out.println("You win!");
+        } // if
     } // clickCell
 
     private void reset() {
@@ -109,8 +155,8 @@ public class GameManager extends JPanel {
                 buttons[i][j].setBackground(new Color(137, 137, 137));
             } // for
         } // for
-
-        // TODO: reset values as well
-        // TODO: when completion counter is added, reset here as well
+        Arrays.stream(values).forEach(row -> Arrays.fill(row, 0));
+        initMines();
+        minesRemaining = ROWS * COLS - NUM_MINES;
     } // reset
 } // class GameManager
