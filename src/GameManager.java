@@ -27,7 +27,7 @@ public class GameManager {
     // State variables
     JButton[][] buttons = new JButton[ROWS][COLS];
     int[][] values = new int[ROWS][COLS];
-    int minesRemaining = ROWS * COLS - NUM_MINES;
+    int cellsRemaining = ROWS * COLS - NUM_MINES;
 
     // Reveal cell logic: here for optimization
     Queue<Integer> queue = new LinkedList<>();
@@ -107,6 +107,7 @@ public class GameManager {
         buttons[i][j].setEnabled(false);
         buttons[i][j].setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100)));
         buttons[i][j].setBackground(Color.LIGHT_GRAY);
+        cellsRemaining--;
     } // revealCell
 
     private void revealCells(int startI, int startJ) {
@@ -149,9 +150,8 @@ public class GameManager {
         } // if
 
         revealCells(i, j);
-        minesRemaining--;
 
-        if (minesRemaining == 0) {
+        if (cellsRemaining == 0) {
             System.out.println("You win!");
         } // if
     } // clickCell
@@ -168,6 +168,6 @@ public class GameManager {
         } // for
         Arrays.stream(values).forEach(row -> Arrays.fill(row, 0));
         initMines();
-        minesRemaining = ROWS * COLS - NUM_MINES;
+        cellsRemaining = ROWS * COLS - NUM_MINES;
     } // reset
 } // class GameManager
