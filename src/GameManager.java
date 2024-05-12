@@ -13,12 +13,12 @@ import java.util.HashSet;
 
 public class GameManager {
     // Constants
-    static final int WIDTH = 400;
-    static final int HEIGHT = 400;
+    static final int ROWS = 10;
+    static final int COLS = 10;
     static final int BUTTON_WIDTH = 40;
     static final int BUTTON_HEIGHT = 40;
-    static final int ROWS = WIDTH / BUTTON_WIDTH;
-    static final int COLS = HEIGHT / BUTTON_HEIGHT;
+    static final int WIDTH = ROWS * BUTTON_HEIGHT;
+    static final int HEIGHT = ROWS * BUTTON_WIDTH;
     static final int NUM_MINES = 9;
 
     // Components
