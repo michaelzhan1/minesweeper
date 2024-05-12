@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 
-public class GameManager extends JPanel {
+public class GameManager {
     // Constants
     static final int WIDTH = 400;
     static final int HEIGHT = 400;
@@ -20,6 +20,9 @@ public class GameManager extends JPanel {
     static final int ROWS = WIDTH / BUTTON_WIDTH;
     static final int COLS = HEIGHT / BUTTON_HEIGHT;
     static final int NUM_MINES = 9;
+
+    // Components
+    JPanel gamePanel;
 
     // State variables
     JButton[][] buttons = new JButton[ROWS][COLS];
@@ -31,14 +34,15 @@ public class GameManager extends JPanel {
     Set<Integer> seen = new HashSet<>();
 
     public GameManager() {
-        setLayout(new GridLayout(ROWS, COLS));
+        gamePanel = new JPanel();
+        gamePanel.setLayout(new GridLayout(ROWS, COLS));
 
         // Init grid elements and board values
         for (int i = 0; i < WIDTH / BUTTON_WIDTH; i++) {
             for (int j = 0; j < HEIGHT / BUTTON_HEIGHT; j++) {
                 JButton newButton = createNewButton(i, j);
                 buttons[i][j] = newButton;
-                this.add(newButton);
+                gamePanel.add(newButton);
             } // for
         } // for
         initMines();
@@ -48,19 +52,19 @@ public class GameManager extends JPanel {
         UIManager.put("Button.select", Color.LIGHT_GRAY);
 
         // Key listeners
-        this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("R"), "press r");
-        this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released R"), "release r");
-        this.getActionMap().put("press r", new AbstractAction() {
+        gamePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("R"), "press r");
+        gamePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released R"), "release r");
+        gamePanel.getActionMap().put("press r", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameManager.this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("R"), "none");
+                gamePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("R"), "none");
                 reset();
             } // actionPerformed
         }); // getActionMap
-        this.getActionMap().put("release r", new AbstractAction() {
+        gamePanel.getActionMap().put("release r", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameManager.this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("R"), "press r");
+                gamePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("R"), "press r");
             } // actionPerformed
         }); // getActionMap
     } // GameManager
