@@ -70,17 +70,16 @@ public class GameManager {
     } // GameManager
 
     private void initMines() {
-        Random rand = new Random();
-        int minePos;
-        for (int i = 0; i < NUM_MINES; i++) {
-            minePos = rand.nextInt(ROWS * COLS);
-            values[minePos / COLS][minePos % COLS] = -1;
+        int[] minePositions = new Random().ints(0, ROWS * COLS).distinct().limit(NUM_MINES).toArray();
+        for (int pos : minePositions) {
+            values[pos / COLS][pos % COLS] = -1;
         } // for
 
         int mineNeighborCount;
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
                 if (values[i][j] != -1) {
+                    // count number of neighboring mines
                     mineNeighborCount = 0;
                     for (int ii = Math.max(0, i - 1); ii < Math.min(ROWS, i + 2); ii++) {
                         for (int jj = Math.max(0, j - 1); jj < Math.min(COLS, j + 2); jj++) {
