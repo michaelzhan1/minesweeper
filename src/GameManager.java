@@ -11,34 +11,38 @@ import java.util.Set;
 import java.util.HashSet;
 
 
-public class GameManager extends JPanel {
+public class GameManager {
     // Constants
-    static final int WIDTH = 400;
-    static final int HEIGHT = 400;
+    static final int ROWS = 10;
+    static final int COLS = 10;
     static final int BUTTON_WIDTH = 40;
     static final int BUTTON_HEIGHT = 40;
-    static final int ROWS = WIDTH / BUTTON_WIDTH;
-    static final int COLS = HEIGHT / BUTTON_HEIGHT;
+    static final int WIDTH = ROWS * BUTTON_HEIGHT;
+    static final int HEIGHT = ROWS * BUTTON_WIDTH;
     static final int NUM_MINES = 9;
+
+    // Components
+    JPanel gamePanel;
 
     // State variables
     JButton[][] buttons = new JButton[ROWS][COLS];
     int[][] values = new int[ROWS][COLS];
-    int minesRemaining = ROWS * COLS - NUM_MINES;
+    int cellsRemaining = ROWS * COLS - NUM_MINES;
 
     // Reveal cell logic: here for optimization
     Queue<Integer> queue = new LinkedList<>();
     Set<Integer> seen = new HashSet<>();
 
     public GameManager() {
-        setLayout(new GridLayout(ROWS, COLS));
+        gamePanel = new JPanel();
+        gamePanel.setLayout(new GridLayout(ROWS, COLS));
 
         // Init grid elements and board values
         for (int i = 0; i < WIDTH / BUTTON_WIDTH; i++) {
             for (int j = 0; j < HEIGHT / BUTTON_HEIGHT; j++) {
                 JButton newButton = createNewButton(i, j);
                 buttons[i][j] = newButton;
-                this.add(newButton);
+                gamePanel.add(newButton);
             } // for
         } // for
         initMines();
@@ -48,35 +52,34 @@ public class GameManager extends JPanel {
         UIManager.put("Button.select", Color.LIGHT_GRAY);
 
         // Key listeners
-        this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("R"), "press r");
-        this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released R"), "release r");
-        this.getActionMap().put("press r", new AbstractAction() {
+        gamePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("R"), "press r");
+        gamePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released R"), "release r");
+        gamePanel.getActionMap().put("press r", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameManager.this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("R"), "none");
+                gamePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("R"), "none");
                 reset();
             } // actionPerformed
         }); // getActionMap
-        this.getActionMap().put("release r", new AbstractAction() {
+        gamePanel.getActionMap().put("release r", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameManager.this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("R"), "press r");
+                gamePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("R"), "press r");
             } // actionPerformed
         }); // getActionMap
     } // GameManager
 
     private void initMines() {
-        Random rand = new Random();
-        int minePos;
-        for (int i = 0; i < NUM_MINES; i++) {
-            minePos = rand.nextInt(ROWS * COLS);
-            values[minePos / COLS][minePos % COLS] = -1;
+        int[] minePositions = new Random().ints(0, ROWS * COLS).distinct().limit(NUM_MINES).toArray();
+        for (int pos : minePositions) {
+            values[pos / COLS][pos % COLS] = -1;
         } // for
 
         int mineNeighborCount;
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
                 if (values[i][j] != -1) {
+                    // count number of neighboring mines
                     mineNeighborCount = 0;
                     for (int ii = Math.max(0, i - 1); ii < Math.min(ROWS, i + 2); ii++) {
                         for (int jj = Math.max(0, j - 1); jj < Math.min(COLS, j + 2); jj++) {
@@ -104,6 +107,7 @@ public class GameManager extends JPanel {
         buttons[i][j].setEnabled(false);
         buttons[i][j].setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100)));
         buttons[i][j].setBackground(Color.LIGHT_GRAY);
+        cellsRemaining--;
     } // revealCell
 
     private void revealCells(int startI, int startJ) {
@@ -146,9 +150,8 @@ public class GameManager extends JPanel {
         } // if
 
         revealCells(i, j);
-        minesRemaining--;
 
-        if (minesRemaining == 0) {
+        if (cellsRemaining == 0) {
             System.out.println("You win!");
         } // if
     } // clickCell
@@ -165,6 +168,6 @@ public class GameManager extends JPanel {
         } // for
         Arrays.stream(values).forEach(row -> Arrays.fill(row, 0));
         initMines();
-        minesRemaining = ROWS * COLS - NUM_MINES;
+        cellsRemaining = ROWS * COLS - NUM_MINES;
     } // reset
 } // class GameManager
