@@ -34,7 +34,12 @@ public class GameManager {
     // Random
     Random rand = new Random();
 
+    // Reset Window
+    String message = "";
+    NewGameWindow popupWindow = new NewGameWindow(message, "Alert");
+
     public GameManager() {
+        // Init game panel
         gamePanel = new JPanel();
         gamePanel.setLayout(new GridLayout(ROWS, COLS));
 
@@ -116,7 +121,6 @@ public class GameManager {
                 } // for
             } // if
         } // while
-
     } // revealCells
 
     private void disableAll() {
@@ -128,20 +132,26 @@ public class GameManager {
     } // disableAll
 
     private void handleCellClick(int i, int j) {
-        if (cells[i][j].getValue() == -1) {
-            disableAll();
-            System.out.println("You died");
-        } // if
         revealCells(i, j);
 
-        if (cellsRemaining == 0) {
+        if (cells[i][j].getValue() == -1 || cellsRemaining == 0) {
+            if (cells[i][j].getValue() == -1) {
+                this.message = "You died. Try again?";
+            } else if (cellsRemaining == 0) {
+                this.message = "You win! Start a new game?";
+            }
+
             disableAll();
-            System.out.println("You win!");
-        } // if
+            this.popupWindow.setMessage(this.message);
+            int status = this.popupWindow.callPopup();
+
+            if (status == 0) {
+                reset();
+            }
+        }
     } // handleCellClick
 
     private void reset() {
-        System.out.println("Resetting...");
         resetMines();
         this.seen.clear();
         cellsRemaining = ROWS * COLS - NUM_MINES;
