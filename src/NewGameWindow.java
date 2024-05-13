@@ -6,13 +6,10 @@ public class NewGameWindow extends JOptionPane {
     public NewGameWindow(String message, String title) {
         super(message, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION);
         dialog = this.createDialog(title);
-    }
+    } // NewGameWindow
 
-    public int callPopup() {
+    public int getPopupResponse() {
         dialog.setVisible(true);
-        int status; // 0: yes, 1: no
-        if (this.getValue() == null) status = 1;
-        else status = Integer.parseInt(this.getValue().toString());
-        return status;
-    }
-}
+        return (this.getValue() == null) ? 1 : Integer.parseInt(this.getValue().toString());
+    } // getPopupResponse
+} // class NewGameWindow

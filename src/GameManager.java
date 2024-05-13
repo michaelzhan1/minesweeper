@@ -21,6 +21,7 @@ public class GameManager {
 
     // Components
     JPanel gamePanel;
+    NewGameWindow popupWindow = new NewGameWindow("", "Alert");
 
     // State tracking
     Cell[][] cells = new Cell[ROWS][COLS];
@@ -34,9 +35,6 @@ public class GameManager {
     // Random
     Random rand = new Random();
 
-    // Reset Window
-    String message = "";
-    NewGameWindow popupWindow = new NewGameWindow(message, "Alert");
 
     public GameManager() {
         // Init game panel
@@ -49,9 +47,8 @@ public class GameManager {
         // Init cells based on number of neighboring mines
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
+                int finalI = i, finalJ = j;
                 Cell newCell = new Cell(i, j, getCellValue(i, j));
-                int finalI = i;
-                int finalJ = j;
                 newCell.addActionListener(e -> handleCellClick(finalI, finalJ));
                 cells[i][j] = newCell;
                 gamePanel.add(newCell);
@@ -136,19 +133,16 @@ public class GameManager {
 
         if (cells[i][j].getValue() == -1 || cellsRemaining == 0) {
             if (cells[i][j].getValue() == -1) {
-                this.message = "You died. Try again?";
+                this.popupWindow.setMessage("You died. Try again?");
             } else if (cellsRemaining == 0) {
-                this.message = "You win! Start a new game?";
-            }
+                this.popupWindow.setMessage("You win! Start a new game?");
+            } // else
 
             disableAll();
-            this.popupWindow.setMessage(this.message);
-            int status = this.popupWindow.callPopup();
 
-            if (status == 0) {
-                reset();
-            }
-        }
+            int status = this.popupWindow.getPopupResponse();
+            if (status == 0) reset();
+        } // if
     } // handleCellClick
 
     private void reset() {
