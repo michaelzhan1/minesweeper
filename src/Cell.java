@@ -15,6 +15,7 @@ public class Cell extends JButton {
     int value;
     boolean flag;
     boolean revealed;
+    boolean frozen;
 
     // Colors
     static Color lineBorderColor = new Color(100, 100, 100);
@@ -32,6 +33,7 @@ public class Cell extends JButton {
         this.value = value;
         this.flag = false;
         this.revealed = false;
+        this.frozen = false;
 
         this.setBackground(unclickedColor);
         this.setBorder(bevel);
@@ -47,7 +49,7 @@ public class Cell extends JButton {
     } // Cell
 
     private void toggleFlag() {
-        if (!this.revealed && !(!this.flag && !this.isEnabled())) {
+        if (!this.revealed && !this.frozen) {
             if (!this.flag) {
                 this.setText("F");
                 this.setEnabled(false);
@@ -67,6 +69,8 @@ public class Cell extends JButton {
     public int getValue() {
         return value;
     } // getValue
+
+    public void setFrozen(boolean frozen) {this.frozen = frozen;}
 
     public void revealCell() {
         this.setText(Integer.toString(this.value));

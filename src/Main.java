@@ -6,7 +6,8 @@ public class Main {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.getContentPane().add(gameManager.gamePanel);
-        frame.setSize(GameManager.WIDTH, GameManager.HEIGHT);
+        frame.setJMenuBar(gameManager.menuBar);
+        frame.setSize(GameManager.windowWidth, GameManager.windowHeight);
         frame.setVisible(true);
     }
 }
