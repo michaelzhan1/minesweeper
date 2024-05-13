@@ -123,9 +123,9 @@ public class GameManager {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
                 cells[i][j].setEnabled(false);
-            }
-        }
-    }
+            } // for
+        } // for
+    } // disableAll
 
     private void handleCellClick(int i, int j) {
         if (cells[i][j].getValue() == -1) {
@@ -135,6 +135,7 @@ public class GameManager {
         revealCells(i, j);
 
         if (cellsRemaining == 0) {
+            disableAll();
             System.out.println("You win!");
         } // if
     } // handleCellClick

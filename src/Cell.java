@@ -2,6 +2,8 @@ import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class Cell extends JButton {
@@ -11,6 +13,8 @@ public class Cell extends JButton {
 
     // Data
     int value;
+    boolean flag;
+    boolean revealed;
 
     // Colors
     static Color lineBorderColor = new Color(100, 100, 100);
@@ -26,10 +30,35 @@ public class Cell extends JButton {
         this.i = i;
         this.j = j;
         this.value = value;
+        this.flag = false;
+        this.revealed = false;
 
         this.setBackground(unclickedColor);
         this.setBorder(bevel);
+
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    toggleFlag();
+                }
+            }
+        });
     } // Cell
+
+    private void toggleFlag() {
+        if (!this.revealed && !(!this.flag && !this.isEnabled())) {
+            if (!this.flag) {
+                this.setText("F");
+                this.setEnabled(false);
+                this.flag = true;
+            } else {
+                this.setText("");
+                this.setEnabled(true);
+                this.flag = false;
+            } // if
+        } // if
+    } // toggleFlag
 
     public void setValue(int value) {
         this.value = value;
@@ -44,6 +73,7 @@ public class Cell extends JButton {
         this.setEnabled(false);
         this.setBorder(line);
         this.setBackground(clickedColor);
+        this.revealed = true;
     } // revealCell
 
     public void reset() {
@@ -51,5 +81,6 @@ public class Cell extends JButton {
         this.setEnabled(true);
         this.setBorder(bevel);
         this.setBackground(unclickedColor);
+        this.revealed = false;
     } // reset
 }
