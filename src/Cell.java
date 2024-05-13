@@ -62,15 +62,12 @@ public class Cell extends JButton {
         } // if
     } // toggleFlag
 
-    public void setValue(int value) {
-        this.value = value;
-    } // setValue
+    public int getValue() {return value;}
 
-    public int getValue() {
-        return value;
-    } // getValue
-
-    public void setFrozen(boolean frozen) {this.frozen = frozen;}
+    public void setFrozen(boolean frozen) {
+        this.frozen = frozen;
+        this.setEnabled(false);
+    } // setFrozen
 
     public void revealCell() {
         this.setText(Integer.toString(this.value));
@@ -79,12 +76,4 @@ public class Cell extends JButton {
         this.setBackground(clickedColor);
         this.revealed = true;
     } // revealCell
-
-    public void reset() {
-        this.setText("");
-        this.setEnabled(true);
-        this.setBorder(bevel);
-        this.setBackground(unclickedColor);
-        this.revealed = false;
-    } // reset
 }
