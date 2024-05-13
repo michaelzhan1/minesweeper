@@ -85,8 +85,8 @@ public class GameManager {
         if (mines.contains(pos)) return -1;
 
         int count = 0;
-        for (int ii = -1; ii < 2; ii++) {
-            for (int jj = -1; jj < 2; jj++) {
+        for (int ii = Math.max(-1, -i); ii <= Math.min(1, ROWS - i - 1); ii++) {
+            for (int jj = Math.max(-1, -j); jj <= Math.min(1, COLS - j - 1); jj++) {
                 if (mines.contains(pos + ii * COLS + jj)) count++;
             } // for
         } // for
