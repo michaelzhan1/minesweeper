@@ -1,7 +1,8 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.GridLayout;
-import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Random;
 import java.util.Queue;
 import java.util.LinkedList;
@@ -16,7 +17,7 @@ public class GameManager {
     static int buttonWidth = 40;
     static int buttonHeight = 40;
     static int windowWidth = rows * buttonHeight;
-    static int windowHeight = rows * buttonWidth + 20;
+    static int windowHeight = rows * buttonWidth + 40;
     static int numMines = 9;
 
     // Components
@@ -24,11 +25,16 @@ public class GameManager {
     JMenuBar menuBar;
     NewGameWindow popupWindow = new NewGameWindow();
     DifficultyWindow diffWindow = new DifficultyWindow();
+    JPanel infoPanel = new JPanel();
+    Stopwatch timerPanel = new Stopwatch();
+    MineCounter minePanel;
+    JPanel gameDisplay;
 
     // State tracking
     Cell[][] cells;
     Set<Integer> mines = new HashSet<>();
     int cellsRemaining;
+    boolean timerStarted = false;
 
     // Reveal cell logic: here for optimization
     Queue<Integer> queue = new LinkedList<>();
@@ -38,12 +44,19 @@ public class GameManager {
     Random rand = new Random();
 
     public GameManager() {
+        gameDisplay = new JPanel();
+        gameDisplay.setLayout(new BorderLayout());
         gamePanel = new JPanel();
         menuBar = new JMenuBar();
         initMenuBar();
         initMines();
+        initInfoPanel();
         initGamePanel();
         initUI();
+        gameDisplay.add(infoPanel, BorderLayout.NORTH);
+        gameDisplay.add(gamePanel, BorderLayout.CENTER);
+        gameDisplay.revalidate();
+        gameDisplay.repaint();
     } // GameManager
 
     private void initMenuBar() {
@@ -58,6 +71,15 @@ public class GameManager {
         menuBar.add(optionsTab);
     } // initMenuBar
 
+    private void initInfoPanel() {
+        infoPanel.setLayout(new GridLayout(1, 2));
+        minePanel = new MineCounter(numMines);
+        infoPanel.add(timerPanel);
+        infoPanel.add(minePanel);
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        infoPanel.setVisible(true);
+    } // initInfoPanel
+
     private void initMines() {
         mines.clear();
         this.rand.ints(0, rows * cols).distinct().limit(numMines).forEach(mines::add);
@@ -70,6 +92,22 @@ public class GameManager {
                 int finalI = i, finalJ = j;
                 Cell newCell = new Cell(i, j, getCellValue(i, j));
                 newCell.addActionListener(e -> handleCellClick(finalI, finalJ));
+                newCell.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        if (SwingUtilities.isRightMouseButton(e)) {
+                            switch(newCell.toggleFlag()) {
+                                case -1:
+                                    minePanel.decrement();
+                                    break;
+                                case 1:
+                                    minePanel.increment();
+                                    break;
+                            }
+                        }
+                    }
+                });
+
                 cells[i][j] = newCell;
                 gamePanel.add(newCell);
             } // for
@@ -120,15 +158,21 @@ public class GameManager {
     } // initUI
 
     private void handleCellClick(int i, int j) {
+        if (!timerStarted) {
+            timerPanel.start();
+            timerStarted = true;
+        } // if
+
         revealCells(i, j);
 
         if (cells[i][j].getValue() == -1 || cellsRemaining == 0) {
             if (cells[i][j].getValue() == -1) {
                 this.popupWindow.setMessage("You died. Try again?");
             } else if (cellsRemaining == 0) {
-                this.popupWindow.setMessage("You win! Start a new game?");
+                this.popupWindow.setMessage("You won in " + timerPanel.getTime() + " seconds!\nStart a new game?");
             } // else
 
+            timerPanel.stop();
             disableAll();
 
             int status = this.popupWindow.getPopupResponse();
@@ -202,9 +246,12 @@ public class GameManager {
         this.seen.clear();
         gamePanel.removeAll();
         initGamePanel();
+        timerPanel.reset();
+        timerStarted = false;
+        minePanel.reset(numMines);
 
         windowWidth = rows * buttonHeight;
-        windowHeight = rows * buttonWidth + 20;
+        windowHeight = rows * buttonWidth + 40;
         gamePanel.getParent().setSize(windowWidth, windowHeight);
         gamePanel.repaint();
         gamePanel.revalidate();
