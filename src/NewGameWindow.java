@@ -5,7 +5,7 @@ public class NewGameWindow extends JOptionPane {
 
     public NewGameWindow() {
         super("", JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION);
-        dialog = this.createDialog("Alert");
+        dialog = createDialog("Alert");
     } // NewGameWindow
 
     public int getPopupResponse() {

@@ -1,8 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.Color;
 
 
@@ -53,16 +51,13 @@ public class Cell extends JButton {
                 return 1;
             } // if
         } // if
-
         return 0;
-
-
     } // toggleFlag
 
     public int getValue() {return value;}
 
-    public void setFrozen(boolean frozen) {
-        this.frozen = frozen;
+    public void freeze() {
+        this.frozen = true;
         this.setEnabled(false);
     } // setFrozen
 

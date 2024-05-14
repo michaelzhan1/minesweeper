@@ -3,8 +3,8 @@ import java.awt.GridLayout;
 import java.awt.Font;
 
 public class MineCounter extends JPanel {
-    int minesRemaining;
     JLabel label;
+    int minesRemaining;
 
     public MineCounter(int mines) {
         setLayout(new GridLayout(1, 1));

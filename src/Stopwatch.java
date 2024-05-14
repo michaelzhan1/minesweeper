@@ -4,8 +4,8 @@ import java.awt.Font;
 
 public class Stopwatch extends JPanel {
     JLabel label;
-    int time;
     Timer timer;
+    int time;
 
     public Stopwatch() {
         setLayout(new GridLayout(1, 1));
@@ -20,19 +20,11 @@ public class Stopwatch extends JPanel {
         });
     }
 
-    public int getTime() {
-        return time;
-    }
+    public int getTime() {return time;}
 
-    public void start() {
-        time = 0;
-        label.setText("Time: 0");
-        timer.start();
-    }
-
-    public void stop() {
-        timer.stop();
-    }
+    public void start() {timer.start();}
+    
+    public void stop() {timer.stop();}
 
     public void reset() {
         timer.stop();
