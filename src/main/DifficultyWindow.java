@@ -16,7 +16,7 @@ public class DifficultyWindow extends JOptionPane {
      * Constructor
      */
     public DifficultyWindow() {
-        super("Change Difficulty", JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        super("Change main.Difficulty", JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
         String[] options = {"Easy", "Medium", "Hard"};
         buttonPanel = new JPanel();
@@ -37,11 +37,11 @@ public class DifficultyWindow extends JOptionPane {
         this.add(buttonPanel);
         this.add(components[1]);
         dialog = this.createDialog("Choose a difficulty level");
-    } // DifficultyWindow
+    } // main.DifficultyWindow
 
     /**
      * Open the dialog and record the response
-     * @return a Difficulty enum representing either the new difficulty or cancelling the option
+     * @return a main.Difficulty enum representing either the new difficulty or cancelling the option
      */
     public Difficulty showPopup() {
         dialog.setVisible(true);
@@ -52,4 +52,4 @@ public class DifficultyWindow extends JOptionPane {
 
         return Difficulty.CANCEL;
     } // showPopup
-} // class DifficultyWindow
+} // class main.DifficultyWindow

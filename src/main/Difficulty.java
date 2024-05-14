@@ -6,4 +6,4 @@ public enum Difficulty {
     MEDIUM,
     HARD,
     CANCEL
-} // enum Difficulty
+} // enum main.Difficulty

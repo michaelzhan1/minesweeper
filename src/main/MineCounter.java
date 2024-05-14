@@ -19,7 +19,7 @@ public class MineCounter extends JPanel {
         label = new JLabel("Mines: " + minesRemaining, SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 20));
         add(label);
-    } // MineCounter
+    } // main.MineCounter
 
     /**
      * Decrement the number of mines, and update the display
@@ -44,4 +44,4 @@ public class MineCounter extends JPanel {
         minesRemaining = mines;
         label.setText("Mines: " + minesRemaining);
     } // reset
-} // class MineCounter
+} // class main.MineCounter

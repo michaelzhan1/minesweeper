@@ -24,7 +24,7 @@ public class Stopwatch extends JPanel {
             time++;
             label.setText("Time: " + time);
         }); // Timer
-    } // Stopwatch
+    } // main.Stopwatch
 
     /**
      * Get current time in seconds
@@ -50,4 +50,4 @@ public class Stopwatch extends JPanel {
         time = 0;
         label.setText("Time: 0");
     } // reset
-} // class Stopwatch
+} // class main.Stopwatch

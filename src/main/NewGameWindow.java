@@ -12,7 +12,7 @@ public class NewGameWindow extends JOptionPane {
     public NewGameWindow() {
         super("", JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION);
         dialog = createDialog("Alert"); // the created dialog is not visible yet
-    } // NewGameWindow
+    } // main.NewGameWindow
 
     /**
      * Open the dialog popup and record the response
@@ -22,4 +22,4 @@ public class NewGameWindow extends JOptionPane {
         dialog.setVisible(true);
         return (this.getValue() == null) ? 1 : Integer.parseInt(this.getValue().toString());
     } // getPopupResponse
-} // class NewGameWindow
+} // class main.NewGameWindow

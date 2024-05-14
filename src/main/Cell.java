@@ -43,7 +43,7 @@ public class Cell extends JButton {
 
         this.setBackground(unclickedColor);
         this.setBorder(bevel);
-    } // Cell
+    } // main.Cell
 
     /**
      * Toggle display of a flag.
@@ -97,4 +97,4 @@ public class Cell extends JButton {
         this.setBackground(clickedColor);
         this.revealed = true;
     } // revealCell
-} // class Cell
+} // class main.Cell

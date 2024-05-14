@@ -56,7 +56,7 @@ public class GameManager {
         initGamePanel();
         initUI();
         finalizeComponents();
-    } // GameManager
+    } // main.GameManager
 
     /**
      * Add all relevant components to the main display
@@ -88,7 +88,7 @@ public class GameManager {
      */
     private void initMenuBar() {
         JMenu optionsTab = new JMenu("Options");
-        JMenuItem diffButton = new JMenuItem("Difficulty");
+        JMenuItem diffButton = new JMenuItem("main.Difficulty");
         JMenuItem resetButton = new JMenuItem("Reset");
         diffButton.addActionListener(e -> changeDifficulty());
         resetButton.addActionListener(e -> reset());
@@ -120,7 +120,7 @@ public class GameManager {
     /**
      * Initialize all cells in the grid
      * <p>
-     *     Create {@code Cell} types with proper listeners and values
+     *     Create {@code main.Cell} types with proper listeners and values
      * </p>
      */
     private void initCells() {
@@ -334,4 +334,4 @@ public class GameManager {
         gamePanel.repaint();
         gamePanel.revalidate();
     } // reset
-} // class GameManager
+} // class main.GameManager
