@@ -206,5 +206,7 @@ public class GameManager {
         windowWidth = rows * buttonHeight;
         windowHeight = rows * buttonWidth + 20;
         gamePanel.getParent().setSize(windowWidth, windowHeight);
+        gamePanel.repaint();
+        gamePanel.revalidate();
     } // reset
 } // class GameManager
