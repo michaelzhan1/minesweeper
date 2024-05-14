@@ -1,9 +1,9 @@
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
-import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Color;
 
 
 public class Cell extends JButton {
@@ -51,11 +51,11 @@ public class Cell extends JButton {
     private void toggleFlag() {
         if (!this.revealed && !this.frozen) {
             if (!this.flag) {
-                this.setText("F");
+                this.setText("\uD83D\uDEA9");
                 this.setEnabled(false);
                 this.flag = true;
             } else {
-                this.setText("");
+                this.setText(null);
                 this.setEnabled(true);
                 this.flag = false;
             } // if
@@ -70,7 +70,11 @@ public class Cell extends JButton {
     } // setFrozen
 
     public void revealCell() {
-        this.setText(Integer.toString(this.value));
+        if (this.value == -1) {
+            this.setText("\uD83D\uDCA3");
+        } else if (this.value != 0){
+            this.setText(Integer.toString(this.value));
+        }
         this.setEnabled(false);
         this.setBorder(line);
         this.setBackground(clickedColor);
