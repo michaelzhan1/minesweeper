@@ -3,7 +3,9 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import java.awt.Color;
 
-
+/**
+ * Class representing a cell in the minesweeper grid
+ */
 public class Cell extends JButton {
     // Positional variables
     int i;
@@ -24,6 +26,12 @@ public class Cell extends JButton {
     static Border bevel = BorderFactory.createBevelBorder(BevelBorder.RAISED);
     static Border line = BorderFactory.createLineBorder(lineBorderColor);
 
+    /**
+     * Constructor
+     * @param i the row index in the grid
+     * @param j the column index in the grid
+     * @param value the value of the cell (-1 means a mine)
+     */
     public Cell(int i, int j, int value) {
         super();
         this.i = i;
@@ -37,6 +45,13 @@ public class Cell extends JButton {
         this.setBorder(bevel);
     } // Cell
 
+    /**
+     * Toggle display of a flag.
+     * <p>
+     * If a flag is displayed, then we can't reveal the cell.
+     * </p>
+     * @return an int representing the effect on the number of mines remaining
+     */
     public int toggleFlag() {
         if (!this.revealed && !this.frozen) {
             if (!this.flag) {
@@ -54,13 +69,23 @@ public class Cell extends JButton {
         return 0;
     } // toggleFlag
 
+    /**
+     * Get value of the cell
+     * @return the value of the cell
+     */
     public int getValue() {return value;}
 
+    /**
+     * Freeze in case of game over and prevent any more actions
+     */
     public void freeze() {
         this.frozen = true;
         this.setEnabled(false);
     } // setFrozen
 
+    /**
+     * Reveal the value of the cell and make the cell un-clickable
+     */
     public void revealCell() {
         if (this.value == -1) {
             this.setText("\uD83D\uDCA3");
@@ -72,4 +97,4 @@ public class Cell extends JButton {
         this.setBackground(clickedColor);
         this.revealed = true;
     } // revealCell
-}
+} // class Cell

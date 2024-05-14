@@ -9,7 +9,9 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.HashSet;
 
-
+/**
+ * Class to manage minesweeper game
+ */
 public class GameManager {
     // Game parameters
     static int rows = 10;
@@ -43,6 +45,9 @@ public class GameManager {
     // Random
     Random rand = new Random();
 
+    /**
+     * Constructor
+     */
     public GameManager() {
         initComponents();
         initMenuBar();
@@ -53,13 +58,19 @@ public class GameManager {
         finalizeComponents();
     } // GameManager
 
+    /**
+     * Add all relevant components to the main display
+     */
     private void finalizeComponents() {
         gameDisplay.add(infoPanel, BorderLayout.NORTH);
         gameDisplay.add(gamePanel, BorderLayout.CENTER);
         gameDisplay.revalidate();
         gameDisplay.repaint();
-    }
+    } // finalizeComponents
 
+    /**
+     * Initialize all Swing components
+     */
     private void initComponents() {
         gameDisplay = new JPanel();
         gameDisplay.setLayout(new BorderLayout());
@@ -72,6 +83,9 @@ public class GameManager {
         diffWindow = new DifficultyWindow();
     }
 
+    /**
+     * Set up the menu bar with options
+     */
     private void initMenuBar() {
         JMenu optionsTab = new JMenu("Options");
         JMenuItem diffButton = new JMenuItem("Difficulty");
@@ -84,6 +98,9 @@ public class GameManager {
         menuBar.add(optionsTab);
     } // initMenuBar
 
+    /**
+     * Initialize the info bar with components (stopwatch and mines remaining counter)
+     */
     private void initInfoPanel() {
         minePanel = new MineCounter(numMines);
         timerPanel = new Stopwatch();
@@ -92,11 +109,20 @@ public class GameManager {
         infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
     } // initInfoPanel
 
+    /**
+     * Initialize mine placement and store in {@code mines}
+     */
     private void initMines() {
         mines.clear();
         this.rand.ints(0, rows * cols).distinct().limit(numMines).forEach(mines::add);
     } // initMines
 
+    /**
+     * Initialize all cells in the grid
+     * <p>
+     *     Create {@code Cell} types with proper listeners and values
+     * </p>
+     */
     private void initCells() {
         cells = new Cell[rows][cols];
 
@@ -127,6 +153,12 @@ public class GameManager {
         } // for
     } // initCells
 
+    /**
+     * Calculate the number of mines adjacent to a cell
+     * @param i the row index of the cell
+     * @param j the column index of the cell
+     * @return the number of mines adjacent to the cell, or -1 if the cell itself is a mine
+     */
     private int getCellValue(int i, int j) {
         int pos = i * cols + j;
         if (mines.contains(pos)) return -1;
@@ -140,6 +172,12 @@ public class GameManager {
         return count;
     } // getCellValue
 
+    /**
+     * Initialize the main game space
+     * <p>
+     *     Initialize cells, and add keyboard support for resetting
+     * </p>
+     */
     private void initGamePanel() {
         gamePanel.setLayout(new GridLayout(rows, cols));
         initCells();
@@ -165,11 +203,19 @@ public class GameManager {
         gamePanel.validate();
     } // initGamePanel
 
+    /**
+     * Set UI options for certain button colors
+     */
     private void initUI() {
         UIManager.put("Button.disabledText", Color.BLACK);
         UIManager.put("Button.select", Color.LIGHT_GRAY);
     } // initUI
 
+    /**
+     * Determine behavior upon left-clicking a cell
+     * @param i the row index of the cell
+     * @param j the column index of the cell
+     */
     private void handleCellClick(int i, int j) {
         if (!timerStarted) {
             timerPanel.start();
@@ -178,6 +224,7 @@ public class GameManager {
 
         revealCells(i, j);
 
+        // Game Over handling
         if (cells[i][j].getValue() == -1 || cellsRemaining == 0) {
             if (cells[i][j].getValue() == -1) {
                 this.popupWindow.setMessage("You died. Try again?");
@@ -193,6 +240,14 @@ public class GameManager {
         } // if
     } // handleCellClick
 
+    /**
+     * Reveal cells based on a clicked cell
+     * <p>
+     *     Reveal a cell when clicked. If the cell has value 0, then reveal all guaranteed-safe cells
+     * </p>
+     * @param startI the row index of the cell
+     * @param startJ the column index of the cell
+     */
     private void revealCells(int startI, int startJ) {
         queue.offer(startI * cols + startJ);
         seen.add(startI * cols + startJ);
@@ -218,12 +273,18 @@ public class GameManager {
         } // while
     } // revealCells
 
+    /**
+     * Disable all cells
+     */
     private void disableAll() {
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < cols; j++)
                 cells[i][j].freeze();
     } // disableAll
 
+    /**
+     * Open difficulty-change popup window, and handle a change in difficulty
+     */
     private void changeDifficulty() {
         Difficulty status = diffWindow.showPopup();
         if (status == Difficulty.CANCEL) return;
@@ -254,6 +315,9 @@ public class GameManager {
         reset();
     } // changeDifficulty
 
+    /**
+     * Reset the game
+     */
     private void reset() {
         this.seen.clear();
         gamePanel.removeAll();
