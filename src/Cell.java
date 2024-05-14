@@ -37,29 +37,26 @@ public class Cell extends JButton {
 
         this.setBackground(unclickedColor);
         this.setBorder(bevel);
-
-        this.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (SwingUtilities.isRightMouseButton(e)) {
-                    toggleFlag();
-                }
-            }
-        });
     } // Cell
 
-    private void toggleFlag() {
+    public int toggleFlag() {
         if (!this.revealed && !this.frozen) {
             if (!this.flag) {
                 this.setText("\uD83D\uDEA9");
                 this.setEnabled(false);
                 this.flag = true;
+                return -1;
             } else {
                 this.setText(null);
                 this.setEnabled(true);
                 this.flag = false;
+                return 1;
             } // if
         } // if
+
+        return 0;
+
+
     } // toggleFlag
 
     public int getValue() {return value;}
