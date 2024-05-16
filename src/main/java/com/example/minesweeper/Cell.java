@@ -1,3 +1,5 @@
+package com.example.minesweeper;
+
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
@@ -43,7 +45,7 @@ public class Cell extends JButton {
 
         this.setBackground(unclickedColor);
         this.setBorder(bevel);
-    } // main.Cell
+    } // Cell
 
     /**
      * Toggle display of a flag.
@@ -97,4 +99,4 @@ public class Cell extends JButton {
         this.setBackground(clickedColor);
         this.revealed = true;
     } // revealCell
-} // class main.Cell
+} // class Cell

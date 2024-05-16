@@ -1,3 +1,5 @@
+package com.example.minesweeper;
+
 import javax.swing.*;
 import java.awt.GridLayout;
 import java.awt.Font;
@@ -24,7 +26,7 @@ public class Stopwatch extends JPanel {
             time++;
             label.setText("Time: " + time);
         }); // Timer
-    } // main.Stopwatch
+    } // Stopwatch
 
     /**
      * Get current time in seconds
@@ -50,4 +52,4 @@ public class Stopwatch extends JPanel {
         time = 0;
         label.setText("Time: 0");
     } // reset
-} // class main.Stopwatch
+} // class Stopwatch
