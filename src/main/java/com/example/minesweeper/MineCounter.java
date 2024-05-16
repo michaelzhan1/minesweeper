@@ -1,3 +1,5 @@
+package com.example.minesweeper;
+
 import javax.swing.*;
 import java.awt.GridLayout;
 import java.awt.Font;
@@ -19,7 +21,7 @@ public class MineCounter extends JPanel {
         label = new JLabel("Mines: " + minesRemaining, SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 20));
         add(label);
-    } // main.MineCounter
+    } // MineCounter
 
     /**
      * Decrement the number of mines, and update the display
@@ -44,4 +46,4 @@ public class MineCounter extends JPanel {
         minesRemaining = mines;
         label.setText("Mines: " + minesRemaining);
     } // reset
-} // class main.MineCounter
+} // class MineCounter

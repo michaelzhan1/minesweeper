@@ -1,3 +1,6 @@
+package com.example.minesweeper;
+
+
 /**
  * Enum for difficulty changes
  */
@@ -6,4 +9,4 @@ public enum Difficulty {
     MEDIUM,
     HARD,
     CANCEL
-} // enum main.Difficulty
+} // enum Difficulty

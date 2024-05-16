@@ -1,3 +1,5 @@
+package com.example.minesweeper;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -56,7 +58,7 @@ public class GameManager {
         initGamePanel();
         initUI();
         finalizeComponents();
-    } // main.GameManager
+    } // GameManager
 
     /**
      * Add all relevant components to the main display
@@ -88,7 +90,7 @@ public class GameManager {
      */
     private void initMenuBar() {
         JMenu optionsTab = new JMenu("Options");
-        JMenuItem diffButton = new JMenuItem("main.Difficulty");
+        JMenuItem diffButton = new JMenuItem("Difficulty");
         JMenuItem resetButton = new JMenuItem("Reset");
         diffButton.addActionListener(e -> changeDifficulty());
         resetButton.addActionListener(e -> reset());
@@ -120,7 +122,7 @@ public class GameManager {
     /**
      * Initialize all cells in the grid
      * <p>
-     *     Create {@code main.Cell} types with proper listeners and values
+     *     Create {@code Cell} types with proper listeners and values
      * </p>
      */
     private void initCells() {
@@ -334,4 +336,4 @@ public class GameManager {
         gamePanel.repaint();
         gamePanel.revalidate();
     } // reset
-} // class main.GameManager
+} // class GameManager

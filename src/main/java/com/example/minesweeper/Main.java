@@ -1,3 +1,5 @@
+package com.example.minesweeper;
+
 import javax.swing.*;
 
 public class Main {
